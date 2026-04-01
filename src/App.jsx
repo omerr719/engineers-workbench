@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Cpu, FolderGit2 } from 'lucide-react';
+import { Plus, Cpu, FolderGit2, User } from 'lucide-react';
 import IntroAnimation from './components/IntroAnimation';
 import SearchBar from './components/SearchBar';
 import ComponentList from './components/ComponentList';
@@ -227,6 +227,18 @@ function App() {
 
             <div className="relative z-10 container mx-auto px-4 py-8 min-h-screen w-full">
               
+              {/* TOP LEFT ALIGNED BACK BUTTON */}
+              <div className="absolute top-6 left-6 md:top-8 md:left-8 z-50">
+                <button 
+                  onClick={() => setHasEnteredSite(false)}
+                  className="flex items-center gap-2 bg-dark-panel/80 hover:bg-white/10 border border-white/10 hover:border-white/30 text-gray-300 hover:text-white px-5 py-2.5 rounded-full font-medium transition-all group backdrop-blur-md shadow-lg"
+                  title="Hakkımda'ya Dön"
+                >
+                  <User className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
+                  <span className="hidden md:inline font-sans">Hakkımda</span>
+                </button>
+              </div>
+
               {/* TOP RIGHT ALIGNED ACTION BUTTON */}
               {activeTab === 'components' && (
                 <div className="absolute top-6 right-6 md:top-8 md:right-8 z-50">
