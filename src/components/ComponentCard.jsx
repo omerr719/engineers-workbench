@@ -4,15 +4,6 @@ import { ChevronRight } from 'lucide-react';
 
 export default function ComponentCard({ component, onSelect }) {
   const [isHovered, setIsHovered] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  const handleMouseMove = (e) => {
-    // Determine bounds and position relatively near the mouse
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left + 20; // 20px offset to the right
-    const y = e.clientY - rect.top - 50;  // 50px offset up
-    setMousePos({ x, y });
-  };
 
   const getTagStyle = (type) => {
     const t = (type || '').toLowerCase();
@@ -31,18 +22,20 @@ export default function ComponentCard({ component, onSelect }) {
       exit={{ opacity: 0, scale: 0.95 }}
       whileHover={{ scale: 1.01 }}
       className="relative glass-panel rounded-xl p-5 cursor-pointer flex items-center justify-between group overflow-visible"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onMouseMove={handleMouseMove}
       onClick={onSelect}
       style={{ isolation: 'isolate' }}
     >
-      <div className="flex-1">
-        <h3 className="text-xl font-bold text-electronic-blue group-hover:text-neon-green transition-colors">
+      {/* TEXT CONTENT (Hover Trigger Zone) */}
+      <div 
+        className="flex-1 max-w-[70%]"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <h3 className="text-xl font-bold text-electronic-blue group-hover:text-neon-green transition-colors w-fit">
           {component.name}
         </h3>
-        <p className="text-gray-400 text-sm mb-2">{component.type}</p>
-        <div className="flex flex-wrap gap-2 mt-2 overflow-hidden">
+        <p className="text-gray-400 text-sm mb-2 w-fit">{component.type}</p>
+        <div className="flex flex-wrap gap-2 mt-2 py-1 w-fit">
           {component.tags.map(tag => (
             <span key={tag} className={`text-xs border px-2 py-1 rounded-md ${getTagStyle(component.type)}`}>
               {tag}
@@ -51,40 +44,31 @@ export default function ComponentCard({ component, onSelect }) {
         </div>
       </div>
       
-      <div className="flex items-center text-gray-500 group-hover:text-electronic-blue transition-colors">
-        <span className="text-sm mr-2 opacity-0 group-hover:opacity-100 transition-opacity">Detay</span>
-        <ChevronRight className="transition-transform group-hover:translate-x-2" />
-      </div>
-
-      {/* Floating Image Portal Effect */}
+      {/* FIXED CLEAN FLOATING IMAGE (Appears inside the card boundaries smoothly) */}
       <AnimatePresence>
         {isHovered && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1, y: [0, -10, 0] }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ 
-              y: { repeat: Infinity, duration: 4, ease: "easeInOut" },
-              opacity: { duration: 0.2 },
-              scale: { duration: 0.2 }
-            }}
-            style={{
-              position: 'absolute',
-              left: mousePos.x,
-              top: mousePos.y,
-              zIndex: 100,
-              pointerEvents: 'none'
-            }}
-            className="w-48 h-48 rounded-xl glass-panel p-2 shadow-2xl flex items-center justify-center border-neon-green/30"
+            initial={{ opacity: 0, scale: 0.9, x: -10 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            exit={{ opacity: 0, scale: 0.9, x: 10 }}
+            transition={{ duration: 0.2, type: "spring", stiffness: 300, damping: 25 }}
+            className="absolute left-[40%] md:left-[55%] top-1/2 -translate-y-1/2 z-50 pointer-events-none"
           >
-            <img 
-              src={component.image} 
-              alt={component.name} 
-              className="w-full h-full object-cover rounded-lg"
-            />
+            <div className="w-20 h-20 md:w-24 md:h-24 rounded-lg bg-white/5 border border-white/10 p-1 flex items-center justify-center shadow-2xl backdrop-blur-xl">
+              <img 
+                src={component.image} 
+                alt={component.name} 
+                className="max-w-full max-h-full object-contain rounded-md"
+              />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <div className="flex items-center text-gray-500 group-hover:text-electronic-blue transition-colors relative z-10 pl-4 bg-gradient-to-l from-dark-panel to-transparent">
+        <span className="text-sm mr-2 opacity-0 group-hover:opacity-100 transition-opacity">Detay</span>
+        <ChevronRight className="transition-transform group-hover:translate-x-2" />
+      </div>
     </motion.div>
   );
 }
