@@ -23,7 +23,7 @@ export default function ComponentDetail({ component, onClose, onDelete, onEdit }
           animate={{ x: 0 }}
           exit={{ x: '100%' }}
           transition={{ type: "spring", damping: 25, stiffness: 200 }}
-          className="w-full md:w-[600px] min-h-full glass-panel border-l border-glass-border shadow-2xl relative pointer-events-auto"
+          className="w-full md:w-[600px] min-h-full bg-dark-panel border-l border-gray-800 shadow-2xl relative pointer-events-auto"
           style={{ isolation: 'isolate' }}
         >
           <div className="absolute top-6 right-6 z-50 flex items-center gap-3 bg-dark-bg/40 backdrop-blur-md rounded-full p-1 border border-white/5">
