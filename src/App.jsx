@@ -15,7 +15,7 @@ import LandingPage from './components/LandingPage';
 import { componentsData as mockComponents, projectsData as mockProjects, projectComponentsData as mockPC } from './data/mockData';
 import { supabase, isSupabaseConfigured } from './lib/supabase';
 
-function App() {
+function App({ isAdmin = false }) {
   const [hasEnteredSite, setHasEnteredSite] = useState(false);
   const [introFinished, setIntroFinished] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -107,7 +107,12 @@ function App() {
       message: "Bu projeyi ve içerdiği tüm bağlantılı BOM listelerini kalıcı olarak silmek istediğinize emin misiniz?",
       onConfirm: async () => {
         if (isSupabaseConfigured) {
-          await supabase.from('projects').delete().eq('id', projectId);
+          const { error } = await supabase.from('projects').delete().eq('id', projectId);
+          if (error) {
+            alert("Silme işlemi başarısız: " + error.message);
+            setConfirmDialog(null);
+            return;
+          }
         }
         setProjects(prev => prev.filter(p => p.id !== projectId));
         setProjectComponents(prev => prev.filter(pc => pc.project_id !== projectId));
@@ -123,7 +128,12 @@ function App() {
       message: "Bu komponenti veritabanından kalıcı olarak silmek istediğinize emin misiniz? (Bağlı olduğu projelerden de silinecektir)",
       onConfirm: async () => {
         if (isSupabaseConfigured) {
-          await supabase.from('components').delete().eq('id', compId);
+          const { error } = await supabase.from('components').delete().eq('id', compId);
+          if (error) {
+            alert("Silme işlemi başarısız: " + error.message);
+            setConfirmDialog(null);
+            return;
+          }
         }
         setComponents(prev => prev.filter(c => c.id !== compId));
         setProjectComponents(prev => prev.filter(pc => pc.component_id !== compId));
@@ -238,7 +248,7 @@ function App() {
             <div className="relative z-10 container mx-auto px-4 py-8 min-h-screen w-full">
               
               {/* TOP LEFT ALIGNED BACK BUTTON */}
-              <div className="absolute top-6 left-6 md:top-8 md:left-8 z-50">
+              <div className="absolute top-6 left-6 md:top-8 md:left-8 z-50 flex gap-3">
                 <button 
                   onClick={() => setHasEnteredSite(false)}
                   className="flex items-center gap-2 bg-dark-panel/80 hover:bg-white/10 border border-white/10 hover:border-white/30 text-gray-300 hover:text-white px-5 py-2.5 rounded-full font-medium transition-all group backdrop-blur-md shadow-lg"
@@ -247,10 +257,23 @@ function App() {
                   <User className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
                   <span className="hidden md:inline font-sans">Hakkımda</span>
                 </button>
+
+                {isAdmin && (
+                  <button 
+                    onClick={async () => {
+                      await supabase.auth.signOut();
+                      window.location.href = '/';
+                    }}
+                    className="flex items-center gap-2 bg-red-900/40 hover:bg-red-500/80 border border-red-500/50 text-red-100 hover:text-white px-5 py-2.5 rounded-full font-medium transition-all group backdrop-blur-md shadow-lg"
+                    title="Sistemden Çıkış Yap"
+                  >
+                    <span className="font-sans">Çıkış Yap</span>
+                  </button>
+                )}
               </div>
 
               {/* TOP RIGHT ALIGNED ACTION BUTTON */}
-              {activeTab === 'components' && (
+              {isAdmin && activeTab === 'components' && (
                 <div className="absolute top-6 right-6 md:top-8 md:right-8 z-50">
                   <button 
                     onClick={() => setAdminMode('component')}
@@ -314,12 +337,14 @@ function App() {
                               <FolderGit2 className="w-16 h-16 text-gray-600 mx-auto mb-4 opacity-50" />
                               <h2 className="text-2xl font-bold text-gray-400 mb-2">Henüz Proje Yok</h2>
                               <p className="text-gray-500 mb-6">Aşağıdaki butona tıklayarak ilk projenizi inşa edin.</p>
-                              <button 
-                                onClick={() => setAdminMode('project')}
-                                className="bg-electronic-blue/20 hover:bg-electronic-blue/30 text-electronic-blue px-6 py-2 rounded-full border border-electronic-blue/50 transition-colors"
-                              >
-                                Proje İnşa Et
-                              </button>
+                              {isAdmin && (
+                                <button 
+                                  onClick={() => setAdminMode('project')}
+                                  className="bg-electronic-blue/20 hover:bg-electronic-blue/30 text-electronic-blue px-6 py-2 rounded-full border border-electronic-blue/50 transition-colors"
+                                >
+                                  Proje İnşa Et
+                                </button>
+                              )}
                             </div>
                           ) : (
                             <ProjectList 
@@ -358,11 +383,11 @@ function App() {
             key="component-detail"
             component={selectedComponent} 
             onClose={() => setSelectedComponent(null)} 
-            onDelete={handleDeleteComponent}
-            onEdit={(comp) => {
+            onDelete={isAdmin ? handleDeleteComponent : null}
+            onEdit={isAdmin ? (comp) => {
                setEditingComponent(comp);
                setSelectedComponent(null);
-            }}
+            } : null}
           />
         )}
 
@@ -373,9 +398,9 @@ function App() {
             project={selectedProject} 
             projectComponents={getBOMForProject(selectedProject.id)}
             onComponentClick={(comp) => setSelectedComponent(comp)} 
-            onUpdateQuantity={handleUpdateBOMQuantity}
+            onUpdateQuantity={isAdmin ? handleUpdateBOMQuantity : null}
             onClose={() => setSelectedProject(null)} 
-            onDelete={handleDeleteProject}
+            onDelete={isAdmin ? handleDeleteProject : null}
           />
         )}
 
