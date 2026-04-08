@@ -104,13 +104,7 @@ export default function ComponentDetail({ component, onClose, onDelete, onEdit }
                 </div>
               )}
 
-              <div className="flex flex-wrap gap-2 mb-8">
-                {component.tags.map(tag => (
-                  <span key={tag} className={`text-sm border px-3 py-1.5 rounded-md ${getTagStyle(component.type)}`}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
+
               
               <div className="flex flex-col sm:flex-row gap-4 border-t border-gray-800/60 pt-8 mt-4">
                 <a 
