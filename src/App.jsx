@@ -8,6 +8,7 @@ import ComponentDetail from './components/ComponentDetail';
 import ProjectList from './components/ProjectList';
 import ProjectDetail from './components/ProjectDetail';
 import AdminPanel from './components/AdminPanel';
+import AddComponentForm from './components/AddComponentForm';
 import MouseTrail from './components/MouseTrail';
 import ConfirmModal from './components/ConfirmModal';
 import LandingPage from './components/LandingPage';
@@ -24,6 +25,7 @@ function App() {
   const [selectedComponent, setSelectedComponent] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [adminMode, setAdminMode] = useState(null); // null | 'project' | 'component'
+  const [editingComponent, setEditingComponent] = useState(null); // component to edit
   const [confirmDialog, setConfirmDialog] = useState(null); // { message, onConfirm }
   
   // Data States
@@ -76,6 +78,14 @@ function App() {
   const handleComponentAdded = (newComp) => {
     setComponents(prev => [newComp, ...prev]);
     addLog(`Component ${newComp.name} added to database.`);
+  };
+
+  const handleComponentUpdated = (updatedComp) => {
+    setComponents(prev => prev.map(c => c.id === updatedComp.id ? updatedComp : c));
+    addLog(`Component ${updatedComp.name} updated in database.`);
+    if (selectedComponent && selectedComponent.id === updatedComp.id) {
+       setSelectedComponent(updatedComp);
+    }
   };
   
   const handleProjectAdded = (newProj, cartData) => {
@@ -334,51 +344,75 @@ function App() {
               </div>
             </div>
 
-            {/* Component Detail slide-in */}
-            {selectedComponent && (
-              <ComponentDetail 
-                component={selectedComponent} 
-                onClose={() => setSelectedComponent(null)} 
-                onDelete={handleDeleteComponent}
-              />
-            )}
-
-            {/* Project Detail full-screen modal */}
-            {selectedProject && (
-              <ProjectDetail 
-                project={selectedProject} 
-                projectComponents={getBOMForProject(selectedProject.id)}
-                onComponentClick={(comp) => setSelectedComponent(comp)} 
-                onUpdateQuantity={handleUpdateBOMQuantity}
-                onClose={() => setSelectedProject(null)} 
-                onDelete={handleDeleteProject}
-              />
-            )}
-
-            {/* Admin Panel Modal */}
-            {adminMode && (
-              <AdminPanel 
-                mode={adminMode}
-                onClose={() => setAdminMode(null)} 
-                onComponentAdded={handleComponentAdded}
-                onProjectAdded={handleProjectAdded}
-                onDeleteComponent={handleDeleteComponent}
-                components={components}
-              />
-            )}
-
-            {/* Custom Confirmation Modal */}
-            {confirmDialog && (
-              <ConfirmModal 
-                message={confirmDialog.message} 
-                onConfirm={confirmDialog.onConfirm} 
-                onCancel={() => setConfirmDialog(null)} 
-              />
-            )}
           </div>
         </motion.div>
       )}
     </AnimatePresence>
+
+    {/* MODALS - Moved outside to prevent 'transform' from capturing 'fixed' positioning */}
+    <div className="font-sans text-white z-50">
+      <AnimatePresence>
+        {/* Component Detail slide-in */}
+        {selectedComponent && (
+          <ComponentDetail 
+            key="component-detail"
+            component={selectedComponent} 
+            onClose={() => setSelectedComponent(null)} 
+            onDelete={handleDeleteComponent}
+            onEdit={(comp) => {
+               setEditingComponent(comp);
+               setSelectedComponent(null);
+            }}
+          />
+        )}
+
+        {/* Project Detail full-screen modal */}
+        {selectedProject && (
+          <ProjectDetail 
+            key="project-detail"
+            project={selectedProject} 
+            projectComponents={getBOMForProject(selectedProject.id)}
+            onComponentClick={(comp) => setSelectedComponent(comp)} 
+            onUpdateQuantity={handleUpdateBOMQuantity}
+            onClose={() => setSelectedProject(null)} 
+            onDelete={handleDeleteProject}
+          />
+        )}
+
+        {/* Admin Panel Modal */}
+        {adminMode && (
+          <AdminPanel 
+            key="admin-panel"
+            mode={adminMode}
+            onClose={() => setAdminMode(null)} 
+            onComponentAdded={handleComponentAdded}
+            onProjectAdded={handleProjectAdded}
+            onDeleteComponent={handleDeleteComponent}
+            components={components}
+          />
+        )}
+
+        {/* Edit Component Modal */}
+        {editingComponent && (
+          <AddComponentForm
+            key="edit-component"
+            initialData={editingComponent}
+            onClose={() => setEditingComponent(null)}
+            onUpdated={handleComponentUpdated}
+          />
+        )}
+
+        {/* Custom Confirmation Modal */}
+        {confirmDialog && (
+          <ConfirmModal 
+            key="confirm-modal"
+            message={confirmDialog.message} 
+            onConfirm={confirmDialog.onConfirm} 
+            onCancel={() => setConfirmDialog(null)} 
+          />
+        )}
+      </AnimatePresence>
+    </div>
     </>
   );
 }

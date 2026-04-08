@@ -3,8 +3,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Plus, Save, AlertCircle, Loader2, FileText, Image as ImageIcon } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
-export default function AddComponentForm({ onClose, onAdded, embedded = false }) {
-  const [formData, setFormData] = useState({
+export default function AddComponentForm({ onClose, onAdded, onUpdated, initialData = null, embedded = false }) {
+  const [formData, setFormData] = useState(initialData ? {
+    name: initialData.name || '',
+    type: initialData.type || '',
+    brand: initialData.brand || '',
+    description: initialData.description || '',
+    tags: Array.isArray(initialData.tags) ? initialData.tags.join(', ') : '',
+    image: initialData.image || '',
+    datasheet: initialData.datasheet || '',
+    buyLink: initialData.buyLink || ''
+  } : {
     name: '',
     type: '',
     brand: '',
@@ -35,21 +44,42 @@ export default function AddComponentForm({ onClose, onAdded, embedded = false })
 
     if (isSupabaseConfigured) {
       try {
-        const { data, error: sbError } = await supabase
-          .from('components')
-          .insert([newComponent])
-          .select();
+        let sbResponse;
+        if (initialData && initialData.id) {
+          // UPDATE
+          sbResponse = await supabase
+            .from('components')
+            .update(newComponent)
+            .eq('id', initialData.id)
+            .select();
+        } else {
+          // INSERT
+          sbResponse = await supabase
+            .from('components')
+            .insert([newComponent])
+            .select();
+        }
         
-        if (sbError) throw sbError;
-        if (onAdded && data) onAdded(data[0]);
+        if (sbResponse.error) throw sbResponse.error;
+        
+        if (initialData && onUpdated && sbResponse.data) {
+           onUpdated(sbResponse.data[0]);
+        } else if (!initialData && onAdded && sbResponse.data) {
+           onAdded(sbResponse.data[0]);
+        }
+        
         onClose();
       } catch (err) {
         setError(err.message);
       }
     } else {
       // Mock modda calisirken Local olarak ekleyelim
-      const fakeId = "COMP-" + Math.random().toString(36).substr(2, 9);
-      if (onAdded) onAdded({ ...newComponent, id: fakeId });
+      if (initialData && onUpdated) {
+        onUpdated({ ...newComponent, id: initialData.id });
+      } else if (onAdded) {
+        const fakeId = "COMP-" + Math.random().toString(36).substr(2, 9);
+        onAdded({ ...newComponent, id: fakeId });
+      }
       onClose();
     }
     setLoading(false);
@@ -68,7 +98,7 @@ export default function AddComponentForm({ onClose, onAdded, embedded = false })
 
           <h2 className="text-3xl font-bold mb-6 text-white flex items-center gap-3">
             <Plus className="text-neon-green w-8 h-8" />
-            Yenı Bıleşen Ekle
+            {initialData ? "Bileşeni Düzenle" : "Yenı Bıleşen Ekle"}
           </h2>
         </>
       )}
@@ -245,13 +275,13 @@ export default function AddComponentForm({ onClose, onAdded, embedded = false })
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose}></div>
+    <div className="fixed inset-0 z-50 flex items-start pt-20 justify-center p-4 overflow-y-auto">
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose}></div>
       <motion.div 
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        initial={{ opacity: 0, scale: 0.95, y: -20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="w-full max-w-2xl"
+        exit={{ opacity: 0, scale: 0.95, y: -20 }}
+        className="w-full max-w-2xl relative z-10 mb-20"
       >
         {formContent}
       </motion.div>
