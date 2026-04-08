@@ -27,43 +27,45 @@ export default function ComponentCard({ component, onSelect }) {
     >
       {/* TEXT CONTENT (Hover Trigger Zone) */}
       <div 
-        className="flex-1 max-w-[70%]"
+        className="flex-1 max-w-[70%] flex items-center"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <h3 className="text-xl font-bold text-electronic-blue group-hover:text-neon-green transition-colors w-fit">
-          {component.name}
-        </h3>
-        <p className="text-gray-400 text-sm mb-2 w-fit">{component.type}</p>
-        <div className="flex flex-wrap gap-2 mt-2 py-1 w-fit">
-          {component.tags.map(tag => (
-            <span key={tag} className={`text-xs border px-2 py-1 rounded-md ${getTagStyle(component.type)}`}>
-              {tag}
-            </span>
-          ))}
+        <div className="relative w-fit pr-4">
+          <h3 className="text-xl font-bold text-electronic-blue group-hover:text-neon-green transition-colors w-fit">
+            {component.name}
+          </h3>
+          <p className="text-gray-400 text-sm mb-2 w-fit">{component.type}</p>
+          <div className="flex flex-wrap gap-2 mt-2 py-1 w-fit">
+            {component.tags.map(tag => (
+              <span key={tag} className={`text-xs border px-2 py-1 rounded-md ${getTagStyle(component.type)}`}>
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          {/* FIXED CLEAN FLOATING IMAGE (Positioned exactly right to the text) */}
+          <AnimatePresence>
+            {isHovered && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, x: -10 }}
+                animate={{ opacity: 1, scale: 1, x: 0 }}
+                exit={{ opacity: 0, scale: 0.9, x: 10 }}
+                transition={{ duration: 0.2, type: "spring", stiffness: 300, damping: 25 }}
+                className="absolute left-[100%] ml-4 md:ml-8 top-1/2 -translate-y-1/2 z-50 pointer-events-none"
+              >
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-lg bg-white/5 border border-white/10 p-1 flex items-center justify-center shadow-2xl backdrop-blur-xl">
+                  <img 
+                    src={component.image} 
+                    alt={component.name} 
+                    className="max-w-full max-h-full object-contain rounded-md"
+                  />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
-      
-      {/* FIXED CLEAN FLOATING IMAGE (Appears inside the card boundaries smoothly) */}
-      <AnimatePresence>
-        {isHovered && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, x: -10 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.9, x: 10 }}
-            transition={{ duration: 0.2, type: "spring", stiffness: 300, damping: 25 }}
-            className="absolute left-[40%] md:left-[55%] top-1/2 -translate-y-1/2 z-50 pointer-events-none"
-          >
-            <div className="w-20 h-20 md:w-24 md:h-24 rounded-lg bg-white/5 border border-white/10 p-1 flex items-center justify-center shadow-2xl backdrop-blur-xl">
-              <img 
-                src={component.image} 
-                alt={component.name} 
-                className="max-w-full max-h-full object-contain rounded-md"
-              />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       <div className="flex items-center text-gray-500 group-hover:text-electronic-blue transition-colors relative z-10 pl-4 bg-gradient-to-l from-dark-panel to-transparent">
         <span className="text-sm mr-2 opacity-0 group-hover:opacity-100 transition-opacity">Detay</span>
