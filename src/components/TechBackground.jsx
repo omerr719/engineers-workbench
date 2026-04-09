@@ -77,7 +77,7 @@ export default function TechBackground() {
   }, []);
 
   return (
-    <div className="absolute inset-0 z-0 pointer-events-none" style={{ backgroundColor: 'rgba(5, 5, 10, 0.5)' }}>
+    <div className="absolute inset-0 z-0 pointer-events-none" style={{ backgroundColor: '#0a0c10' }}>
       <canvas 
         ref={canvasRef} 
         className="w-full h-full opacity-60 mix-blend-screen"
