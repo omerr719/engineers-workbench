@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Plus, Save, AlertCircle, Loader2, FileText, Image as ImageIcon } from 'lucide-react';
+import { X, Plus, Save, AlertCircle, Loader2, FileText, Image as ImageIcon, Cpu } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import TechBackground from './TechBackground';
 import AssistantBot from './AssistantBot';
@@ -98,8 +98,8 @@ export default function AddComponentForm({ onClose, onAdded, onUpdated, initialD
           </button>
 
           <h2 className="text-3xl font-bold mb-6 text-white flex items-center gap-3">
-            <Plus className="text-neon-green w-8 h-8" />
-            {initialData ? "Bileşeni Düzenle" : "Yenı Bıleşen Ekle"}
+            <Cpu className="text-electronic-blue w-8 h-8" />
+            {initialData ? "Bileşeni Düzenle" : "Veritabanına Komponent Kaydet"}
           </h2>
         </>
       )}

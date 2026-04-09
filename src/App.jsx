@@ -404,8 +404,8 @@ function App({ isAdmin = false }) {
           />
         )}
 
-        {/* Admin Panel Modal */}
-        {adminMode && (
+        {/* Admin Panel Modal (Project Builder) */}
+        {adminMode === 'project' && (
           <AdminPanel 
             key="admin-panel"
             mode={adminMode}
@@ -414,6 +414,15 @@ function App({ isAdmin = false }) {
             onProjectAdded={handleProjectAdded}
             onDeleteComponent={handleDeleteComponent}
             components={components}
+          />
+        )}
+
+        {/* Add Component Modal Native */}
+        {adminMode === 'component' && (
+          <AddComponentForm
+            key="add-component-native"
+            onClose={() => setAdminMode(null)}
+            onAdded={handleComponentAdded}
           />
         )}
 
