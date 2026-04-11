@@ -258,7 +258,7 @@ function App({ isAdmin = false }) {
                   title="Hakkımda'ya Dön"
                 >
                   <User className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
-                  <span className="hidden md:inline font-sans">{t[lang].about}</span>
+                  <span className="hidden md:inline font-sans">{t?.about}</span>
                 </button>
 
                 {isAdmin && (
@@ -270,7 +270,7 @@ function App({ isAdmin = false }) {
                     className="flex items-center gap-2 bg-red-900/40 hover:bg-red-500/80 border border-red-500/50 text-red-100 hover:text-white px-5 py-2.5 rounded-full font-medium transition-all group backdrop-blur-md shadow-lg"
                     title="Sistemden Çıkış Yap"
                   >
-                    <span className="font-sans">{t[lang].logout}</span>
+                    <span className="font-sans">{t?.logout}</span>
                   </button>
                 )}
               </div>
@@ -283,7 +283,7 @@ function App({ isAdmin = false }) {
                     className="flex items-center gap-2 bg-dark-panel/80 hover:bg-electronic-blue/20 border border-white/10 hover:border-electronic-blue/50 text-white px-5 py-2.5 rounded-full font-medium transition-all group backdrop-blur-md shadow-lg"
                   >
                     <Plus className="w-5 h-5 text-neon-green group-hover:rotate-90 transition-transform duration-300" />
-                    <span className="hidden md:inline font-sans">{t[lang].addComponent}</span>
+                    <span className="hidden md:inline font-sans">{t?.addComponent}</span>
                   </button>
                 )}
                 
