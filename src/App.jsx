@@ -21,6 +21,20 @@ function App({ isAdmin = false }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('projects'); // 'projects' | 'components'
   
+  const [lang, setLang] = useState('tr');
+  const t = {
+    tr: {
+      about: 'Hakkımda',
+      logout: 'Çıkış Yap',
+      addComponent: 'Komponent Ekle'
+    },
+    en: {
+      about: 'About',
+      logout: 'Logout',
+      addComponent: 'Add Component'
+    }
+  };
+  
   // Selection States
   const [selectedComponent, setSelectedComponent] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -255,7 +269,7 @@ function App({ isAdmin = false }) {
                   title="Hakkımda'ya Dön"
                 >
                   <User className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
-                  <span className="hidden md:inline font-sans">Hakkımda</span>
+                  <span className="hidden md:inline font-sans">{t[lang].about}</span>
                 </button>
 
                 {isAdmin && (
@@ -267,23 +281,38 @@ function App({ isAdmin = false }) {
                     className="flex items-center gap-2 bg-red-900/40 hover:bg-red-500/80 border border-red-500/50 text-red-100 hover:text-white px-5 py-2.5 rounded-full font-medium transition-all group backdrop-blur-md shadow-lg"
                     title="Sistemden Çıkış Yap"
                   >
-                    <span className="font-sans">Çıkış Yap</span>
+                    <span className="font-sans">{t[lang].logout}</span>
                   </button>
                 )}
               </div>
 
-              {/* TOP RIGHT ALIGNED ACTION BUTTON */}
-              {isAdmin && activeTab === 'components' && (
-                <div className="absolute top-6 right-6 md:top-8 md:right-8 z-50">
+              {/* TOP RIGHT ALIGNED ACTION BUTTON & LANGUAGE TOGGLE */}
+              <div className="absolute top-6 right-6 md:top-8 md:right-8 z-50 flex items-center gap-3">
+                {isAdmin && activeTab === 'components' && (
                   <button 
                     onClick={() => setAdminMode('component')}
                     className="flex items-center gap-2 bg-dark-panel/80 hover:bg-electronic-blue/20 border border-white/10 hover:border-electronic-blue/50 text-white px-5 py-2.5 rounded-full font-medium transition-all group backdrop-blur-md shadow-lg"
                   >
                     <Plus className="w-5 h-5 text-neon-green group-hover:rotate-90 transition-transform duration-300" />
-                    <span className="hidden md:inline font-sans">Komponent Ekle</span>
+                    <span className="hidden md:inline font-sans">{t[lang].addComponent}</span>
+                  </button>
+                )}
+                
+                <div className="flex items-center bg-dark-panel/80 border border-white/10 rounded-full p-1 backdrop-blur-md shadow-lg">
+                  <button 
+                    onClick={() => setLang('tr')}
+                    className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${lang === 'tr' ? 'bg-electronic-blue text-white shadow-md' : 'text-gray-400 hover:text-white'}`}
+                  >
+                    TR
+                  </button>
+                  <button 
+                    onClick={() => setLang('en')}
+                    className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${lang === 'en' ? 'bg-electronic-blue text-white shadow-md' : 'text-gray-400 hover:text-white'}`}
+                  >
+                    EN
                   </button>
                 </div>
-              )}
+              </div>
 
               <header className="mb-12 text-center relative max-w-4xl mx-auto mt-4">
                 <motion.h1 
