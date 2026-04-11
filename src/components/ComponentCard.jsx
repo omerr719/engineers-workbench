@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function ComponentCard({ component, onSelect }) {
+  const { t } = useLanguage();
   const [isHovered, setIsHovered] = useState(false);
 
   const getTagStyle = (type) => {
@@ -68,7 +70,7 @@ export default function ComponentCard({ component, onSelect }) {
       </div>
 
       <div className="flex items-center text-gray-500 group-hover:text-electronic-blue transition-colors relative z-10 pl-4 bg-gradient-to-l from-dark-panel to-transparent">
-        <span className="text-sm mr-2 opacity-0 group-hover:opacity-100 transition-opacity">Detay</span>
+        <span className="text-sm mr-2 opacity-0 group-hover:opacity-100 transition-opacity">{t?.detailsBtn}</span>
         <ChevronRight className="transition-transform group-hover:translate-x-2" />
       </div>
     </motion.div>

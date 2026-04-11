@@ -4,8 +4,10 @@ import { X, Plus, Save, AlertCircle, Loader2, FileText, Image as ImageIcon, Cpu 
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import TechBackground from './TechBackground';
 import AssistantBot from './AssistantBot';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function AddComponentForm({ onClose, onAdded, onUpdated, initialData = null, embedded = false }) {
+  const { lang, t } = useLanguage();
   const [formData, setFormData] = useState(initialData ? {
     name: initialData.name || '',
     type: initialData.type || '',
@@ -123,7 +125,7 @@ export default function AddComponentForm({ onClose, onAdded, onUpdated, initialD
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             <div>
-              <label className="block text-gray-400 text-sm mb-1">Bileşen Adı *</label>
+              <label className="block text-gray-400 text-sm mb-1">{t?.compNameInput || "Bileşen Adı *"}</label>
               <input 
                 required
                 type="text" 
@@ -136,7 +138,7 @@ export default function AddComponentForm({ onClose, onAdded, onUpdated, initialD
               />
             </div>
             <div>
-              <label className="block text-gray-400 text-sm mb-1">Tipi *</label>
+              <label className="block text-gray-400 text-sm mb-1">{t?.compTypeInput || "Tipi *"}</label>
               <input 
                 required
                 type="text" 
@@ -145,11 +147,11 @@ export default function AddComponentForm({ onClose, onAdded, onUpdated, initialD
                 onBlur={() => setFocusedField(null)}
                 onChange={e => setFormData({...formData, type: e.target.value})}
                 className="w-full bg-dark-bg border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-electronic-blue focus:ring-1 focus:ring-electronic-blue transition-colors"
-                placeholder="Örn: Op-Amp"
+                placeholder={t?.compTypePh || "Örn: Op-Amp"}
               />
             </div>
             <div>
-              <label className="block text-gray-400 text-sm mb-1">Marka/Üretici</label>
+              <label className="block text-gray-400 text-sm mb-1">{t?.compBrandInput || "Marka/Üretici"}</label>
               <input 
                 type="text" 
                 value={formData.brand}
@@ -163,7 +165,7 @@ export default function AddComponentForm({ onClose, onAdded, onUpdated, initialD
           </div>
 
           <div>
-            <label className="block text-gray-400 text-sm mb-1">Açıklama *</label>
+            <label className="block text-gray-400 text-sm mb-1">{t?.descLabel || "Açıklama *"} *</label>
             <textarea 
               required
               rows={3}
@@ -177,7 +179,7 @@ export default function AddComponentForm({ onClose, onAdded, onUpdated, initialD
           </div>
 
           <div>
-            <label className="block text-gray-400 text-sm mb-1">Etiketler (Virgülle ayırın)</label>
+            <label className="block text-gray-400 text-sm mb-1">{t?.compTagsInput || "Etiketler (Virgülle ayırın)"}</label>
             <input 
               type="text" 
               value={formData.tags}
@@ -185,12 +187,12 @@ export default function AddComponentForm({ onClose, onAdded, onUpdated, initialD
               onBlur={() => setFocusedField(null)}
               onChange={e => setFormData({...formData, tags: e.target.value})}
               className="w-full bg-dark-bg border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-electronic-blue focus:ring-1 focus:ring-electronic-blue transition-colors"
-              placeholder="Örn: Analog, Yükselteç, TI"
+              placeholder={t?.compTagsPh || "Örn: Analog, Yükselteç, TI"}
             />
           </div>
 
           <div>
-            <label className="block text-gray-400 text-sm mb-1">Görsel URL (İsteğe bağlı)</label>
+            <label className="block text-gray-400 text-sm mb-1">{t?.compImageInput || "Görsel URL (İsteğe bağlı)"}</label>
             <input 
               type="url" 
               value={formData.image}
@@ -275,7 +277,7 @@ export default function AddComponentForm({ onClose, onAdded, onUpdated, initialD
               onClick={onClose}
               className="px-6 py-3 rounded-lg font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
             >
-              İptal
+              {t?.cancelBtn || "İptal"}
             </button>
             <button 
               type="submit"
@@ -289,7 +291,7 @@ export default function AddComponentForm({ onClose, onAdded, onUpdated, initialD
               ) : (
                 <>
                   <Save className="w-5 h-5" />
-                  Kaydet
+                  {t?.saveBtn || "Kaydet"}
                 </>
               )}
             </button>

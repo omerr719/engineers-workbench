@@ -1,8 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FolderGit2 } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function ProjectCard({ project, onSelect }) {
+  const { t } = useLanguage();
   return (
     <motion.div 
       layout
@@ -31,7 +33,7 @@ export default function ProjectCard({ project, onSelect }) {
       <div className="p-4">
         <p className="text-gray-400 text-sm line-clamp-2">{project.description}</p>
         <div className="mt-4 flex items-center text-electronic-blue text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-          Sistemi İncele &rarr;
+          {t?.inspectBtn} &rarr;
         </div>
       </div>
     </motion.div>

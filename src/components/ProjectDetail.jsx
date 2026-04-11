@@ -2,16 +2,18 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { X, FileText, Cpu, Download, Trash2, Plus, Minus } from 'lucide-react';
 import * as XLSX from 'xlsx';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function ProjectDetail({ project, projectComponents, onClose, onComponentClick, onDelete, onUpdateQuantity }) {
+  const { lang, t } = useLanguage();
   const handleExportExcel = () => {
     if (!projectComponents || projectComponents.length === 0) return;
 
     // Excel verisini 'Array of Arrays' formatinda hazirla (Basliga proje ismini ekliyoruz)
     const wsData = [
-      [`${project.name} - BOM (Kullanılan Malzemeler) Listesi`],
+      [`${project.name} - ${t?.bomTitle || 'BOM'}`],
       [], // Bos satir
-      ['Komponent Adı', 'Miktar', 'Tip/Kategori', 'Marka/Üretici', 'Datasheet Linki', 'Satın Alma Linki'],
+      [t?.componentLabel || 'Komponent Adı', t?.quantityLabel || 'Miktar', t?.typeLabel || 'Tip', t?.brandLabel || 'Marka', 'Datasheet Linki', 'Satın Alma Linki'],
       ...projectComponents.map(item => [
         item.component.name,
         item.quantity,
@@ -53,7 +55,6 @@ export default function ProjectDetail({ project, projectComponents, onClose, onC
             <button 
               onClick={() => onDelete(project.id)}
               className="p-2 bg-red-500/20 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition-all border border-red-500/30"
-              title="Projeyi Sil"
             >
               <Trash2 className="w-6 h-6" />
             </button>
@@ -93,7 +94,7 @@ export default function ProjectDetail({ project, projectComponents, onClose, onC
             className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-6 py-3 rounded-lg font-medium transition-all"
           >
             <FileText className="w-5 h-5" />
-            Şematik (PDF) Göster
+            {t?.schematicBtn}
           </a>
         </div>
 
@@ -101,7 +102,7 @@ export default function ProjectDetail({ project, projectComponents, onClose, onC
         <div className="w-full md:w-1/2 p-8 md:p-12 overflow-y-auto bg-dark-bg/40">
           <h3 className="text-2xl font-bold mb-6 text-white flex items-center gap-3">
             <Cpu className="text-electronic-blue" />
-            BOM (Kullanılan Malzemeler)
+            {t?.bomTitle}
           </h3>
           
           <div className="flex flex-col gap-4">

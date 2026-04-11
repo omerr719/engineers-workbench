@@ -3,8 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Plus, Save, AlertCircle, FolderGit2, Cpu, Search, Minus, Trash2, Loader2 } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import AddComponentForm from './AddComponentForm';
+import { useLanguage } from '../context/LanguageContext';
 // Admin panel will receive components list to allow adding them to a project
 export default function AdminPanel({ onClose, onComponentAdded, onProjectAdded, components, mode, onDeleteComponent }) {
+  const { t } = useLanguage();
   // mode: 'project' | 'component'
 
   
@@ -123,9 +125,9 @@ export default function AdminPanel({ onClose, onComponentAdded, onProjectAdded, 
         <div className="p-8 pb-4">
           <h2 className="text-3xl font-bold text-white flex items-center gap-3">
             {mode === 'project' ? (
-               <><FolderGit2 className="text-neon-green w-8 h-8" /> Proje İnşa Atölyesi</>
+               <><FolderGit2 className="text-neon-green w-8 h-8" /> {t?.projectWorkshop}</>
             ) : (
-               <><Cpu className="text-electronic-blue w-8 h-8" /> Veritabanına Komponent Kaydet</>
+               <><Cpu className="text-electronic-blue w-8 h-8" /> {t?.dbSaveComp}</>
             )}
           </h2>
         </div>
@@ -144,7 +146,7 @@ export default function AdminPanel({ onClose, onComponentAdded, onProjectAdded, 
               {!isSupabaseConfigured && (
                 <div className="mb-6 p-4 rounded-lg bg-electronic-blue/20 border border-electronic-blue/50 flex items-start gap-3">
                   <AlertCircle className="text-electronic-blue mt-0.5 flex-shrink-0" />
-                  <p className="text-sm text-blue-200">Mock (Deneme) Modundasınız. Eklenen projeler ve BOM verileri sadece geçici olarak görünecektir.</p>
+                  <p className="text-sm text-blue-200">{t?.mockModeWarning}</p>
                 </div>
               )}
 
@@ -160,7 +162,7 @@ export default function AdminPanel({ onClose, onComponentAdded, onProjectAdded, 
                 <div className="w-full lg:w-1/2 flex flex-col gap-6">
                   <form id="project-form" onSubmit={handleProjectSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-gray-400 text-sm mb-1">Proje Adı *</label>
+                      <label className="block text-gray-400 text-sm mb-1">{t?.projectName}</label>
                       <input 
                         required type="text" value={projectData.name} onChange={e => setProjectData({...projectData, name: e.target.value})}
                         className="w-full bg-dark-bg border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-neon-green transition-colors" placeholder="Örn: Pozisyoner Kartı"
@@ -177,14 +179,14 @@ export default function AdminPanel({ onClose, onComponentAdded, onProjectAdded, 
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-gray-400 text-sm mb-1">Kapak Görseli URL</label>
+                        <label className="block text-gray-400 text-sm mb-1">{t?.coverImageUrl}</label>
                         <input 
                           type="url" value={projectData.cover_image} onChange={e => setProjectData({...projectData, cover_image: e.target.value})}
                           className="w-full bg-dark-bg border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-neon-green transition-colors text-sm" placeholder="https://..."
                         />
                       </div>
                       <div>
-                        <label className="block text-gray-400 text-sm mb-1">Şematik (PDF) URL</label>
+                        <label className="block text-gray-400 text-sm mb-1">{t?.schematicPdfUrl}</label>
                         <input 
                           type="url" value={projectData.schematic_pdf} onChange={e => setProjectData({...projectData, schematic_pdf: e.target.value})}
                           className="w-full bg-dark-bg border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-neon-green transition-colors text-sm" placeholder="https://..."
@@ -197,13 +199,13 @@ export default function AdminPanel({ onClose, onComponentAdded, onProjectAdded, 
                   <div className="flex-1 bg-dark-bg/60 rounded-xl border border-gray-800 p-5 flex flex-col shadow-inner">
                     <h3 className="text-xl font-bold mb-4 text-neon-green flex items-center gap-2">
                        <Cpu className="w-5 h-5"/>
-                       Seçilen Malzemeler (BOM)
+                       {t?.selectedBOM}
                     </h3>
                     
                     <div className="flex-1 overflow-y-auto space-y-3 custom-scrollbar pr-2 min-h-[150px]">
                       {cart.length === 0 ? (
                         <p className="text-gray-500 text-center mt-10 text-sm italic">
-                          Sağdaki listeden bu projeye eklenecek<br/>komponentleri arayıp seçin.
+                          {t?.emptyCartTip}
                         </p>
                       ) : (
                         cart.map((item, idx) => (
@@ -234,7 +236,7 @@ export default function AdminPanel({ onClose, onComponentAdded, onProjectAdded, 
 
                 {/* SAĞ KOLON: KÜTÜPHANEDE ARA VE EKLE */}
                 <div className="w-full lg:w-1/2 flex flex-col bg-dark-panel rounded-xl border border-glass-border p-5">
-                   <h3 className="text-xl font-bold mb-4 text-electronic-blue">Kütüphaneden Ara</h3>
+                   <h3 className="text-xl font-bold mb-4 text-electronic-blue">{t?.searchLibrary}</h3>
                    
                    <div className="relative mb-4">
                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -249,7 +251,7 @@ export default function AdminPanel({ onClose, onComponentAdded, onProjectAdded, 
 
                    <div className="flex-1 overflow-y-auto space-y-2 custom-scrollbar pr-2 min-h-[300px] pb-4">
                       {filteredBOMComponents.length === 0 ? (
-                        <p className="text-gray-500 text-center py-4">Sonuç bulunamadı.</p>
+                        <p className="text-gray-500 text-center py-4">{t?.noResults}</p>
                       ) : (
                         filteredBOMComponents.map(comp => (
                           <div 
@@ -278,7 +280,7 @@ export default function AdminPanel({ onClose, onComponentAdded, onProjectAdded, 
                    
                    {/* Kaydet Butonu sağ alt kosede formun dısında, ama form=project-form yaparsak tetikleriz */}
                    <div className="pt-4 mt-auto border-t border-gray-800 flex justify-end gap-3">
-                      <button type="button" onClick={onClose} className="px-5 py-2.5 rounded-lg font-medium text-gray-400 hover:text-white hover:bg-white/10 transition-colors">İptal</button>
+                      <button type="button" onClick={onClose} className="px-5 py-2.5 rounded-lg font-medium text-gray-400 hover:text-white hover:bg-white/10 transition-colors">{t?.cancelBtn}</button>
                       <button 
                         type="submit" 
                         form="project-form"
@@ -290,7 +292,7 @@ export default function AdminPanel({ onClose, onComponentAdded, onProjectAdded, 
                         ) : (
                           <>
                             <Save className="w-5 h-5" />
-                            Projeyi Canlıya Al
+                            {t?.saveLiveBtn}
                           </>
                         )}
                       </button>

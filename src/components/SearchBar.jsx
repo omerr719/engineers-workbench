@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../context/LanguageContext';
 
 const placeholders = ["'Buck Converter'", "'MCU'", "'Sensör'", "'STM32'", "'LDO Regulator'", "'4-20mA Transmitter'"];
 
 export default function SearchBar({ query, setQuery }) {
+  const { lang, t } = useLanguage();
   const [isFocused, setIsFocused] = useState(false);
   
   // Typing Effect State
@@ -62,7 +64,7 @@ export default function SearchBar({ query, setQuery }) {
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          placeholder={`Ara: ${placeholderText}${showCursor ? '|' : ' '}`}
+          placeholder={`${t?.searchBtn || 'Ara'}: ${placeholderText}${showCursor ? '|' : ' '}`}
           className="flex-1 bg-transparent border-none outline-none text-lg text-white placeholder-gray-500 font-mono tracking-wide"
         />
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Cpu, Layers, Radio, Box, TerminalSquare, ArrowRight, Mail, Linkedin } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 function PCBTraces() {
   const canvasRef = useRef(null);
@@ -197,6 +198,8 @@ function PCBTraces() {
 }
 
 export default function LandingPage({ onEnter }) {
+  const { lang, t } = useLanguage();
+
   // Profil efekti icin animasyon varyantlari
   const imageVariants = {
     hidden: { filter: 'blur(30px)', opacity: 0, scale: 1.1 },
@@ -236,7 +239,7 @@ export default function LandingPage({ onEnter }) {
               {/* FALLBACK: Eger resim bulunamazsa alt (alt text) gosterilir ama biz hazriliyoruz */}
               <img 
                 src="/profile.jpg.jpeg" 
-                alt="Ömer Faruk İlhan" 
+                alt={t?.name || "Ömer Faruk İlhan"} 
                 onError={(e) => {
                   e.target.onerror = null; 
                   e.target.src = "https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=800"; // Gecici guzel bir muhendis fotografi fallback
@@ -246,8 +249,8 @@ export default function LandingPage({ onEnter }) {
               
               {/* Profil Kartı Gradyan Alt Kismi */}
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-dark-bg via-dark-bg/80 to-transparent p-8">
-                 <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 tracking-tight">Ömer Faruk İlhan</h1>
-                 <h2 className="text-xl text-neon-green font-mono">Gömülü Sistemler ve Donanım Mühendisi</h2>
+                 <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 tracking-tight">{t?.name}</h1>
+                 <h2 className="text-xl text-neon-green font-mono">{t?.jobTitle}</h2>
               </div>
             </motion.div>
           </div>
@@ -258,53 +261,53 @@ export default function LandingPage({ onEnter }) {
             <motion.div custom={1} initial="hidden" animate="visible" variants={textVariants}>
               <div className="flex items-center gap-3 mb-6">
                 <TerminalSquare className="w-8 h-8 text-electronic-blue" />
-                <h3 className="text-sm font-bold tracking-[0.2em] text-electronic-blue uppercase">Hakkımda</h3>
+                <h3 className="text-sm font-bold tracking-[0.2em] text-electronic-blue uppercase">{t?.aboutHeader}</h3>
               </div>
               <p className="text-xl leading-relaxed text-gray-300 font-light mb-8">
-                Elektronik tasarım ve gömülü sistemler dünyasında, <span className="text-white font-medium">karmaşık problemleri endüstriyel standartlarda donanım çözümlerine dönüştürmeye</span> odaklanan bir mühendisim. Kariyerim boyunca yüksek hassasiyetli sensör entegrasyonundan, endüstriyel kontrol kartlarının (pozisyoner kartları vb.) mimari tasarımına kadar geniş bir yelpazede projeler yürüttüm.
+                {t?.aboutP1}
               </p>
               <p className="text-xl leading-relaxed text-gray-300 font-light mb-16">
-                Özellikle yüksek hassasiyetli sensör teknolojileri, <span className="text-white font-medium">4-20mA akım döngüsü mimarileri ve endüstriyel kontrol sistemleri</span> üzerine odaklanıyorum. Sadece devre tasarlamakla kalmıyor; yüksek gürültülü (EMI/EMC) fabrika ortamlarında kararlı çalışan, verimlilik odaklı ve uçtan uca entegre edilmiş akıllı donanım çözümleri geliştiriyorum.
+                {t?.aboutP2}
               </p>
             </motion.div>
 
             <motion.div custom={2} initial="hidden" animate="visible" variants={textVariants} className="mb-16">
-               <h3 className="text-2xl font-bold text-white mb-8 border-b border-gray-800 pb-4">Teknik Uzmanlık Alanlarım</h3>
+               <h3 className="text-2xl font-bold text-white mb-8 border-b border-gray-800 pb-4">{t?.techExpertise}</h3>
                
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  {/* KART 1 */}
                  <div className="glass-panel p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300 border-t border-t-electronic-blue/30">
                    <Cpu className="w-8 h-8 text-electronic-blue mb-4" />
-                   <h4 className="text-lg font-bold text-white mb-2">Mikrodenetleyiciler ve Gömülü Sistemler</h4>
+                   <h4 className="text-lg font-bold text-white mb-2">{t?.expertise1Title}</h4>
                    <p className="text-sm text-gray-400 leading-relaxed">
-                     STM32, PIC ve ATmega serileri başta olmak üzere çeşitli mikrodenetleyici mimarileri üzerinde C/C++ ile firmware geliştirme; I2C, SPI, UART ve RS485 haberleşme protokolleri.
+                     {t?.expertise1Desc}
                    </p>
                  </div>
 
                  {/* KART 2 */}
                  <div className="glass-panel p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300 border-t border-t-neon-green/30">
                    <Layers className="w-8 h-8 text-neon-green mb-4" />
-                   <h4 className="text-lg font-bold text-white mb-2">Donanım Tasarımı</h4>
+                   <h4 className="text-lg font-bold text-white mb-2">{t?.expertise2Title}</h4>
                    <p className="text-sm text-gray-400 leading-relaxed">
-                     Çok katmanlı PCB tasarımı (Autodesk Eagle, KiCad), Şematik Tasarım ve EMI/EMC uyumlu donanım mimarileri.
+                     {t?.expertise2Desc}
                    </p>
                  </div>
 
                  {/* KART 3 */}
                  <div className="glass-panel p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300 border-t border-t-yellow-500/30">
                    <Radio className="w-8 h-8 text-yellow-500 mb-4" />
-                   <h4 className="text-lg font-bold text-white mb-2">Sensör Teknolojileri</h4>
+                   <h4 className="text-lg font-bold text-white mb-2">{t?.expertise3Title}</h4>
                    <p className="text-sm text-gray-400 leading-relaxed">
-                     Endüktif metal algılama, Hall-Effect sensörler ve yüksek tanımlı hassas veri toplama (ADC) sistemleri.
+                     {t?.expertise3Desc}
                    </p>
                  </div>
 
                  {/* KART 4 */}
                  <div className="glass-panel p-6 rounded-2xl hover:-translate-y-2 transition-transform duration-300 border-t border-t-purple-500/30">
                    <Box className="w-8 h-8 text-purple-500 mb-4" />
-                   <h4 className="text-lg font-bold text-white mb-2">Mekanik Entegrasyon</h4>
+                   <h4 className="text-lg font-bold text-white mb-2">{t?.expertise4Title}</h4>
                    <p className="text-sm text-gray-400 leading-relaxed">
-                     Elektronik kartlar için 3D modelleme ve koruyucu muhafaza (enclosure) tasarımı ile uçtan uca donanım/ürün geliştirme.
+                     {t?.expertise4Desc}
                    </p>
                  </div>
                </div>
@@ -312,8 +315,8 @@ export default function LandingPage({ onEnter }) {
 
             <motion.div custom={3} initial="hidden" animate="visible" variants={textVariants} className="mb-20">
                <p className="text-lg text-gray-300 italic p-6 border-l-4 border-electronic-blue bg-electronic-blue/5 rounded-r-xl">
-                 "Teknolojinin sınırlarını zorlayan projelerde yer almaktan ve karmaşık mühendislik zorluklarına yenilikçi çözümler üretmekten keyif alıyorum." <br/><br/>
-                 Sektörel iş birlikleri veya teknik fikir alışverişi için benimle her zaman iletişime geçebilirsiniz.
+                 {t?.quote} <br/><br/>
+                 {t?.contactInfo}
                </p>
 
                <div className="flex flex-wrap items-center gap-6 mt-8">
@@ -327,7 +330,7 @@ export default function LandingPage({ onEnter }) {
                     <div className="p-3 rounded-full bg-white/5 group-hover:bg-blue-500/20 group-hover:text-blue-400 transition-colors">
                       <Linkedin className="w-5 h-5" />
                     </div>
-                    <span>LinkedIn Profili</span>
+                    <span>{t?.linkedin}</span>
                  </a>
                </div>
             </motion.div>
@@ -338,7 +341,7 @@ export default function LandingPage({ onEnter }) {
                 onClick={onEnter}
                 className="group w-full md:w-auto flex items-center justify-center gap-4 bg-gradient-to-r from-electronic-blue to-neon-green text-dark-bg px-10 py-5 rounded-2xl font-bold text-xl hover:shadow-[0_0_40px_rgba(57,255,20,0.4)] transition-all hover:-translate-y-1"
               >
-                Portfolyo / Dijital Laboratuvara Giriş
+                {t?.enterBtn}
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
               </button>
             </motion.div>

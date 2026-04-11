@@ -14,6 +14,7 @@ import ConfirmModal from './components/ConfirmModal';
 import LandingPage from './components/LandingPage';
 import { componentsData as mockComponents, projectsData as mockProjects, projectComponentsData as mockPC } from './data/mockData';
 import { supabase, isSupabaseConfigured } from './lib/supabase';
+import { useLanguage } from './context/LanguageContext';
 
 function App({ isAdmin = false }) {
   const [hasEnteredSite, setHasEnteredSite] = useState(false);
@@ -21,19 +22,7 @@ function App({ isAdmin = false }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('projects'); // 'projects' | 'components'
   
-  const [lang, setLang] = useState('tr');
-  const t = {
-    tr: {
-      about: 'Hakkımda',
-      logout: 'Çıkış Yap',
-      addComponent: 'Komponent Ekle'
-    },
-    en: {
-      about: 'About',
-      logout: 'Logout',
-      addComponent: 'Add Component'
-    }
-  };
+  const { lang, setLang, t } = useLanguage();
   
   // Selection States
   const [selectedComponent, setSelectedComponent] = useState(null);

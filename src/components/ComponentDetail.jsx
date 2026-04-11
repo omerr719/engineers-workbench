@@ -1,8 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FileText, ShoppingCart, Info, Trash2, Edit2 } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function ComponentDetail({ component, onClose, onDelete, onEdit }) {
+  const { lang, t } = useLanguage();
   const getTagStyle = (type) => {
     const t = (type || '').toLowerCase();
     if (t.includes('micro') || t.includes('mcu')) return 'text-blue-400 border-blue-400/30 bg-blue-400/10';
@@ -114,17 +116,17 @@ export default function ComponentDetail({ component, onClose, onDelete, onEdit }
                   className="flex items-center gap-2 bg-gradient-to-r from-electronic-blue to-blue-600 hover:from-blue-600 hover:to-electronic-blue text-white px-6 py-3 rounded-lg font-medium shadow-lg hover:shadow-electronic-blue/50 transition-all flex-1 justify-center"
                 >
                   <ShoppingCart className="w-5 h-5" />
-                  Satın Al
+                  {t?.buyBtn}
                 </a>
                 
                 <a 
                   href={component.datasheet}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white px-6 py-3 rounded-lg font-medium transition-all flex-1 justify-center"
+                  className="flex items-center gap-2 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white px-6 py-3 rounded-lg font-medium border border-gray-700 hover:border-gray-500 transition-all flex-1 justify-center"
                 >
-                  <FileText className="w-5 h-5" />
-                  Datasheet
+                  <FileText className="w-5 h-5 opacity-70" />
+                  {t?.datasheetBtn}
                 </a>
               </div>
             </motion.div>

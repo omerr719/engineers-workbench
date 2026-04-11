@@ -1,8 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { AlertTriangle, Trash2, X } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function ConfirmModal({ message, onConfirm, onCancel }) {
+  const { lang, t } = useLanguage();
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onCancel}></div>
@@ -21,7 +23,7 @@ export default function ConfirmModal({ message, onConfirm, onCancel }) {
             <AlertTriangle className="w-8 h-8 text-red-500" />
           </div>
           
-          <h3 className="text-xl font-bold text-white mb-2">Emin misiniz?</h3>
+          <h3 className="text-xl font-bold text-white mb-2">{t?.areYouSure || "Emin misiniz?"}</h3>
           <p className="text-gray-400 mb-8 px-4 leading-relaxed">
             {message}
           </p>
@@ -31,14 +33,14 @@ export default function ConfirmModal({ message, onConfirm, onCancel }) {
               onClick={onCancel}
               className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 border border-glass-border text-white rounded-xl font-medium transition-colors"
             >
-              Hayır, İptal
+              {t?.cancelBtn || "Hayır, İptal"}
             </button>
             <button 
               onClick={onConfirm}
               className="flex-1 px-4 py-3 bg-red-600/90 hover:bg-red-500 text-white rounded-xl font-bold transition-colors flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(220,38,38,0.3)]"
             >
               <Trash2 className="w-5 h-5" />
-              Evet, Sil
+              {t?.yesDeleteBtn || "Evet, Sil"}
             </button>
           </div>
         </div>
