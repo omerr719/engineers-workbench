@@ -1,3 +1,5 @@
+import React, { useEffect } from 'react';
+import { motion } from 'framer-motion';
 import LightRays from './LightRays';
 
 export default function IntroAnimation({ onComplete }) {
