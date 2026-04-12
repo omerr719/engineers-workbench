@@ -243,7 +243,7 @@ export default function LandingPage({ onEnter }) {
                 status="Online"
                 contactText={t?.aboutHeader}
                 avatarUrl="/profile.jpg.jpeg"
-                showUserInfo={true}
+                showUserInfo={false}
                 enableTilt={true}
                 enableMobileTilt={true}
                 onContactClick={() => {
