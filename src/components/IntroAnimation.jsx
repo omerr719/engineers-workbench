@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
+import LightRays from './LightRays';
 
 export default function IntroAnimation({ onComplete }) {
   useEffect(() => {
@@ -20,8 +19,26 @@ export default function IntroAnimation({ onComplete }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-dark-bg">
-      <div className="relative w-64 h-64 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-dark-bg overflow-hidden">
+      {/* Background Light Rays */}
+      <div className="absolute inset-0 pointer-events-none z-0 opacity-40">
+        <LightRays
+          raysOrigin="top-center"
+          raysColor="#ffffff"
+          raysSpeed={1.2}
+          lightSpread={0.6}
+          rayLength={4}
+          followMouse={true}
+          mouseInfluence={0.15}
+          noiseAmount={0.05}
+          distortion={0.1}
+          pulsating={true}
+          fadeDistance={1.2}
+          saturation={0.8}
+        />
+      </div>
+
+      <div className="relative w-64 h-64 flex items-center justify-center z-10">
         {/* PCB Trace SVG Animation */}
         <svg className="absolute inset-0 w-full h-full circuit-glow" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <motion.path 
