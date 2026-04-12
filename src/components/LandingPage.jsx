@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Cpu, Layers, Radio, Box, TerminalSquare, ArrowRight, Mail, Linkedin } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import ProfileCard from './ProfileCard';
 
 function PCBTraces() {
   const canvasRef = useRef(null);
@@ -234,24 +235,25 @@ export default function LandingPage({ onEnter }) {
               initial="hidden"
               animate="visible"
               variants={imageVariants}
-              className="relative rounded-3xl overflow-hidden glass-panel border border-glass-border shadow-[0_0_50px_rgba(10,132,255,0.15)] aspect-[4/5] object-cover"
             >
-              {/* FALLBACK: Eger resim bulunamazsa alt (alt text) gosterilir ama biz hazriliyoruz */}
-              <img 
-                src="/profile.jpg.jpeg" 
-                alt={t?.name || "Ömer Faruk İlhan"} 
-                onError={(e) => {
-                  e.target.onerror = null; 
-                  e.target.src = "https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=800"; // Gecici guzel bir muhendis fotografi fallback
+              <ProfileCard
+                name={t?.name}
+                title={t?.jobTitle}
+                handle="omerrilhan"
+                status="Online"
+                contactText={t?.aboutHeader}
+                avatarUrl="/profile.jpg.jpeg"
+                showUserInfo={true}
+                enableTilt={true}
+                enableMobileTilt={true}
+                onContactClick={() => {
+                  const mailto = "mailto:omerrilhan34@gmail.com";
+                  window.location.href = mailto;
                 }}
-                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
+                behindGlowColor="rgba(125, 190, 255, 0.67)"
+                behindGlowEnabled={true}
+                innerGradient="linear-gradient(145deg,#60496e8c 0%,#71C4FF44 100%)"
               />
-              
-              {/* Profil Kartı Gradyan Alt Kismi */}
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-dark-bg via-dark-bg/80 to-transparent p-8">
-                 <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 tracking-tight">{t?.name}</h1>
-                 <h2 className="text-xl text-neon-green font-mono">{t?.jobTitle}</h2>
-              </div>
             </motion.div>
           </div>
 
