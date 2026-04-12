@@ -331,14 +331,14 @@ function App({ isAdmin = false }) {
                       className={`flex-1 md:flex-none flex items-center justify-center gap-2 py-4 px-8 font-medium transition-colors text-lg ${activeTab === 'projects' ? 'text-neon-green border-b-2 border-neon-green bg-neon-green/5' : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'}`}
                     >
                       <FolderGit2 className="w-5 h-5" />
-                      Projeler
+                      {t?.projects}
                     </button>
                     <button
                       onClick={() => setActiveTab('components')}
                       className={`flex-1 md:flex-none flex items-center justify-center gap-2 py-4 px-8 font-medium transition-colors text-lg ${activeTab === 'components' ? 'text-electronic-blue border-b-2 border-electronic-blue bg-electronic-blue/5' : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'}`}
                     >
                       <Cpu className="w-5 h-5" />
-                      Komponent Kütüphanesi
+                      {t?.componentLibrary}
                     </button>
                   </div>
 
@@ -353,14 +353,14 @@ function App({ isAdmin = false }) {
                           {filteredProjects.length === 0 ? (
                             <div className="text-center py-20 bg-dark-bg/40 border border-gray-800 rounded-2xl glass-panel">
                               <FolderGit2 className="w-16 h-16 text-gray-600 mx-auto mb-4 opacity-50" />
-                              <h2 className="text-2xl font-bold text-gray-400 mb-2">Henüz Proje Yok</h2>
-                              <p className="text-gray-500 mb-6">Aşağıdaki butona tıklayarak ilk projenizi inşa edin.</p>
+                              <h2 className="text-2xl font-bold text-gray-400 mb-2">{t?.noProjectsYet}</h2>
+                              <p className="text-gray-500 mb-6">{t?.buildFirstProject}</p>
                               {isAdmin && (
                                 <button 
                                   onClick={() => setAdminMode('project')}
                                   className="bg-electronic-blue/20 hover:bg-electronic-blue/30 text-electronic-blue px-6 py-2 rounded-full border border-electronic-blue/50 transition-colors"
                                 >
-                                  Proje İnşa Et
+                                  {t?.buildProject}
                                 </button>
                               )}
                             </div>

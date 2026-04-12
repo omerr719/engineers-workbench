@@ -10,6 +10,10 @@ export const translations = {
     addComponent: 'Komponent Ekle',
     projects: 'Projeler',
     components: 'Komponentler',
+    componentLibrary: 'Komponent Kütüphanesi',
+    noProjectsYet: 'Henüz Proje Yok',
+    buildFirstProject: 'Aşağıdaki butona tıklayarak ilk projenizi inşa edin.',
+    buildProject: 'Proje İnşa Et',
     subtitle: 'Donanım Tasarımı • Gömülü Sistemler • Malzeme Envanteri',
     searchPlaceholder: 'MCU, Op-Amp, Regülatör...',
     
@@ -91,6 +95,10 @@ export const translations = {
     addComponent: 'Add Component',
     projects: 'Projects',
     components: 'Components',
+    componentLibrary: 'Component Library',
+    noProjectsYet: 'No Projects Yet',
+    buildFirstProject: 'Click the button below to build your first project.',
+    buildProject: 'Build Project',
     subtitle: 'Hardware Design • Embedded Systems • Component Inventory',
     searchPlaceholder: 'MCU, Op-Amp, Regulator...',
     
